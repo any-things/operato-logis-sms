@@ -72,9 +72,7 @@ public class SmsPreprocessService extends AbstractExecutionService implements IP
 		this.deletePreprocess(batch);
 		
 		/**
-		 * 1. order 테이블에서 데이터가 있는지 확인? 오더테이블은 언제 데이터가 생성되는가?
-		 * 2. 이시점에서는 상위 시스템에서 상세 주문정보를 받아 슈트할당? 소터호기? 할당이 안된 상태로 데이터를 만드는 역할을 하는것인지?? 
-		 * 3. 할당이 안된 데이터를 만든다고 했을 경우 수신 받을때 만들면 되는게 아닌가?
+		 * 1. 가공 버튼 클릭시 preprocess에 들어간다.
 		 * 4. 
 		 */
 		
