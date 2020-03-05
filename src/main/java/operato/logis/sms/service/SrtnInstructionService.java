@@ -11,10 +11,8 @@ import xyz.anythings.base.entity.JobBatch;
 import xyz.anythings.base.service.api.IInstructionService;
 import xyz.anythings.sys.service.AbstractQueryService;
 
-// 호기복사와 배치 추가가 필요하다.
-@Component("smsInstructionService")
-public class SmsInstructionService extends AbstractQueryService implements IInstructionService {
-
+@Component("srtnInstructionService")
+public class SrtnInstructionService extends AbstractQueryService implements IInstructionService {
 	@Autowired
 	private SmsQueryStore queryStore;
 	
@@ -52,5 +50,4 @@ public class SmsInstructionService extends AbstractQueryService implements IInst
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
 }

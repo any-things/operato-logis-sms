@@ -130,7 +130,7 @@ public class SmsReceiveBatchService extends AbstractQueryService {
 		List<BatchReceiptItem> items = receipt.getItems();
 		 
 		for(BatchReceiptItem item : items) {
-			if(ValueUtil.isEqualIgnoreCase(SmsConstants.JOB_TYPE_SDAS, item.getJobType()) || ValueUtil.isEqualIgnoreCase(SmsConstants.JOB_TYPE_SRTN, item.getJobType())) {
+			if((ValueUtil.isEqualIgnoreCase(SmsConstants.JOB_TYPE_SDAS, item.getJobType()) || ValueUtil.isEqualIgnoreCase(SmsConstants.JOB_TYPE_SRTN, item.getJobType())) && ValueUtil.isEqualIgnoreCase(item.getStatus(), LogisConstants.COMMON_STATUS_WAIT)) {
 				this.startToReceiveData(receipt, item);
 			}
 		}

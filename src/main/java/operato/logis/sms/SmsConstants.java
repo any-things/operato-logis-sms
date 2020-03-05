@@ -9,11 +9,11 @@ import xyz.anythings.base.LogisConstants;
  */
 public class SmsConstants extends LogisConstants {		
 	/**
-	 * 분류 작업 유형 : DAS
+	 * 분류 작업 유형 : SDAS
 	 */
 	public static final String JOB_TYPE_SDAS = "SDAS";
 	/**
-	 * 분류 작업 유형 : RTN 
+	 * 분류 작업 유형 : SRTN 
 	 */
 	public static final String JOB_TYPE_SRTN = "SRTN";
 }

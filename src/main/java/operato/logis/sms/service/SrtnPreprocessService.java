@@ -23,8 +23,8 @@ import xyz.elidom.util.ValueUtil;
  *
  */
 
-@Component("smsPreprocessService")
-public class SmsPreprocessService extends AbstractExecutionService implements IPreprocessService {
+@Component("srtnPreprocessService")
+public class SrtnPreprocessService extends AbstractExecutionService implements IPreprocessService {
 
 	/**
 	 * Sms 쿼리 스토어

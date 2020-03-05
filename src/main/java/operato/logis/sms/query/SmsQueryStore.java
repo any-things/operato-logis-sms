@@ -47,4 +47,49 @@ public class SmsQueryStore extends AbstractQueryStore {
 		return this.getQueryByPath("batch/WmsIfToReceiptUpdate");
 	}
 	
+	/**
+	 * 주문 데이터로 부터  주문 가공 쿼리
+	 *
+	 * @return
+	 */
+	public String getSdasGeneratePreprocessQuery(){
+		return this.getQueryByPath("sdas/sdasGeneratePreprocess");
+	}
+	
+	/**
+	 * Station 시작 슈트번호
+	 *
+	 * @return
+	 */
+	public String getSdasStationQuery(){
+		return this.getQueryByPath("sdas/sdasStation");
+	}
+	
+	/**
+	 * 작업 배치 별 주문 가공 정보에서 슈트별로 거래처 할당 상태를 조회 쿼리
+	 *
+	 * @return
+	 */
+	public String getSdasChuteStatusQuery() {
+		return this.getQueryByPath("sdas/sdasChuteStatus");
+	}
+	
+	/**
+	 * 작업 배치 별 슈트별 물량 할당 요약 정보를 조회 쿼리
+	 *
+	 * @return
+	 */
+	public String getSdasPreprocessSummaryQuery() {
+		return this.getQueryByPath("sdas/sdasPreprocessSummary");
+	}
+	
+	/**
+	 * 작업 생성
+	 *
+	 * @return
+	 */
+	public String getSdasGenerateJobInstancesQuery() {
+		return this.getQueryByPath("sdas/sdasGenerateJobInstances");
+	}
+	
 }
