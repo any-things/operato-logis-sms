@@ -89,8 +89,6 @@ public class SdasPreprocessService extends AbstractExecutionService implements I
 		int generatedCount = ValueUtil.isNotEmpty(preprocessList) ? preprocessList.size() : 0;
 		if(generatedCount > 0) {
 			this.assignChuteByAuto(batch, sorterCd, preprocessList, false);
-			
-//			this.queryManager.insertBatch(preprocessList);
 		}
 
 		// 4. 결과 리턴

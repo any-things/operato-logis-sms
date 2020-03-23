@@ -6,10 +6,19 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import operato.logis.sms.entity.Chute;
 import operato.logis.sms.query.SmsQueryStore;
 import xyz.anythings.base.entity.JobBatch;
+import xyz.anythings.base.entity.OrderPreprocess;
 import xyz.anythings.base.service.api.IInstructionService;
 import xyz.anythings.sys.service.AbstractQueryService;
+import xyz.anythings.sys.util.AnyOrmUtil;
+import xyz.anythings.sys.util.AnyValueUtil;
+import xyz.elidom.dbist.dml.Query;
+import xyz.elidom.sys.SysConstants;
+import xyz.elidom.sys.util.MessageUtil;
+import xyz.elidom.sys.util.ThrowUtil;
+import xyz.elidom.util.ValueUtil;
 
 @Component("srtnInstructionService")
 public class SrtnInstructionService extends AbstractQueryService implements IInstructionService {
@@ -23,11 +32,17 @@ public class SrtnInstructionService extends AbstractQueryService implements IIns
 	}
 
 	@Override
-	public int instructBatch(JobBatch batch, List<String> equipIdList, Object... params) {
+	public int instructBatch(JobBatch batch, List<String> equipCdList, Object... params) {
 		// 1. 배치에 대한 상태 체크
 		// 2. 작업지시할 수 있는 상태이면 Status Update
 		// 3. OrderPreprocess 데이터 삭제
-		return 0;
+		int instructCount = 0;
+		if(this.beforeInstructBatch(batch, equipCdList)) {
+			// TODO 쿼리 수정 해야함 
+//			instructCount += this.doInstructBatch(batch, equipCdList);
+		}
+		
+		return instructCount;
 	}
 
 	@Override
@@ -49,5 +64,88 @@ public class SrtnInstructionService extends AbstractQueryService implements IIns
 	public int cancelInstructionBatch(JobBatch batch) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	/**
+	 * 작업 지시 전 처리 액션
+	 *
+	 * @param batch
+	 * @param rackList
+	 * @return
+	 */
+	protected boolean beforeInstructBatch(JobBatch batch, List<String> equipIdList) {
+		// 배치 상태가 작업 지시 상태인지 체크
+		if(ValueUtil.isNotEqual(batch.getStatus(), JobBatch.STATUS_READY)) {
+			// '작업 지시 대기' 상태가 아닙니다
+			throw ThrowUtil.newValidationErrorWithNoLog(MessageUtil.getTerm("terms.text.is_not_wait_state", "JobBatch status is not 'READY'"));
+		}
+
+		return true;
+	}
+	
+	/**
+	 * 작업 지시 처리 로직
+	 *
+	 * @param batch
+	 * @param regionList
+	 * @return
+	 */
+	protected int doInstructBatch(JobBatch batch, List<String> regionList) {
+		// 1. 배치의 주문 가공 정보 조회
+		Long domainId = batch.getDomainId();
+		Query query = AnyOrmUtil.newConditionForExecution(domainId);
+		query.addFilter("batchId", batch.getId());  
+		List<OrderPreprocess> preprocesses = this.queryManager.selectList(OrderPreprocess.class, query);
+		
+		// 2. 주문 가공 정보로 부터 슈트 리스트 조회
+		List<String> chuteNoList = AnyValueUtil.filterValueListBy(preprocesses, "subEquipCd");
+		Query condition = AnyOrmUtil.newConditionForExecution(domainId);
+		condition.addSelect("id", "chuteNo", "batchId", "status");
+		condition.addFilter("chuteNo", SysConstants.IN, chuteNoList);
+		condition.addFilter("activeFlag", 1);
+		condition.addOrder("chuteNo", false);
+		List<Chute> chuteList = this.queryManager.selectList(Chute.class, condition);
+		
+		// 3. 슈트 중에 현재 작업 중이거나 사용 불가한 슈트가 있는지 체크
+		for(Chute chute : chuteList) {
+			if(ValueUtil.isEqualIgnoreCase(chute.getStatus(), JobBatch.STATUS_RUNNING)) {
+				// 호기에 다른 작업 배치가 할당되어 있습니다
+				throw ThrowUtil.newValidationErrorWithNoLog(true, "ASSIGNED_ANOTHER_BATCH", ValueUtil.toList(chute.getChuteNo()));
+			}
+		}
+		
+		int chuteCount = chuteList.size();
+		for(int i = 0 ; i < chuteCount ; i++) {
+			Chute chute = chuteList.get(i);
+			List<OrderPreprocess> chutePreprocesses = AnyValueUtil.filterListBy(preprocesses, "subEquipCd", chute.getChuteNo());
+			this.generateJobInstances(batch, chute, chutePreprocesses);
+		}
+				
+		
+		AnyOrmUtil.updateBatch(chuteList, 100, "status", "batchId", "jobType");
+		batch.setStatus(JobBatch.STATUS_RUNNING);
+		this.queryManager.update(batch, "status");
+		// TODO agent에 정보 생성후 전달 해야한다.
+		
+		return preprocesses.size();
+	}
+	
+	private void generateJobInstances(JobBatch batch, Chute chute, List<OrderPreprocess> preprocesses) {
+		Map<String, Object> params = ValueUtil.newMap("domainId,batchId", batch.getDomainId(), batch.getId());
+//		String insertQuery = queryStore.getSdasGenerateJobInstancesQuery();
+		String insertQuery = "";
+		
+		for (OrderPreprocess preprocess : preprocesses) {
+			params.put("equipCd", preprocess.getEquipCd());
+			params.put("equipNm", preprocess.getEquipNm());
+			params.put("subEquipCd", preprocess.getSubEquipCd());
+			params.put("shopNm", preprocess.getCellAssgnNm());
+			params.put("shopCd", preprocess.getCellAssgnCd());
+			this.queryManager.executeBySql(insertQuery, params);
+		}
+		
+		chute.setStatus(JobBatch.STATUS_RUNNING);
+		chute.setBatchId(batch.getId());
+		chute.setJobType(batch.getJobType());
 	}
 }

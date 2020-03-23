@@ -48,7 +48,7 @@ public class SmsQueryStore extends AbstractQueryStore {
 	}
 	
 	/**
-	 * 주문 데이터로 부터  주문 가공 쿼리
+	 * 주문 데이터로 부터 출고 주문 가공 쿼리
 	 *
 	 * @return
 	 */
@@ -90,6 +90,33 @@ public class SmsQueryStore extends AbstractQueryStore {
 	 */
 	public String getSdasGenerateJobInstancesQuery() {
 		return this.getQueryByPath("sdas/sdasGenerateJobInstances");
+	}
+	
+	/**
+	 * 주문 데이터로 부터 반품 주문 가공 쿼리
+	 *
+	 * @return
+	 */
+	public String getSrtnGeneratePreprocessQuery(){
+		return this.getQueryByPath("srtn/srtnGeneratePreprocess");
+	}
+	
+	/**
+	 * 작업 배치 별 주문 가공 정보에서 슈트별로 SKU 할당 상태를 조회 쿼리
+	 *
+	 * @return
+	 */
+	public String getSrtnChuteStatusQuery() {
+		return this.getQueryByPath("srtn/srtnChuteStatus");
+	}
+	
+	/**
+	 * 작업 배치 별 슈트별 물량 할당 요약 정보를 조회 쿼리
+	 *
+	 * @return
+	 */
+	public String getSrtnPreprocessSummaryQuery() {
+		return this.getQueryByPath("srtn/srtnPreprocessSummary");
 	}
 	
 }
