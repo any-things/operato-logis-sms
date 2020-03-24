@@ -119,4 +119,13 @@ public class SmsQueryStore extends AbstractQueryStore {
 		return this.getQueryByPath("srtn/srtnPreprocessSummary");
 	}
 	
+	/**
+	 * SMS Chute 별 실적 조회 쿼리
+	 *
+	 * @return
+	 */
+	public String getSmsChuteSummaryQuery() {
+		return this.getQueryByPath("select/smsChuteSummary");
+	}
+	
 }
