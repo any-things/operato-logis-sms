@@ -1,4 +1,4 @@
-package operato.logis.sms.service;
+package operato.logis.sms.service.impl.sdas;
 
 import java.util.List;
 import java.util.Map;

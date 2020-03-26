@@ -31,7 +31,7 @@ public class SmsQueryStore extends AbstractQueryStore {
 	
 	/*** BatchReceipt 관련 데이터 쿼리 ***/
 	/**
-	 * WMS I/F 테이블로 부터 반품 BatchReceipt 데이터를 조회 한다.
+	 * WMS I/F 테이블로 부터 Sorter BatchReceipt 데이터를 조회 한다.
 	 * @return
 	 */
 	public String getWmsIfToReceiptDataQuery() {

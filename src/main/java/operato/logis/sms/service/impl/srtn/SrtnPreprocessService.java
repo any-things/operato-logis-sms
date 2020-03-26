@@ -1,4 +1,4 @@
-package operato.logis.sms.service;
+package operato.logis.sms.service.impl.srtn;
 
 import java.util.ArrayList;
 import java.util.Collections;
