@@ -69,7 +69,12 @@ public class SmsReceiveBatchService extends AbstractQueryService {
 		if(runBatchReceipt != null) return runBatchReceipt;
 		
 		// 2. WMS IF 테이블에서 수신 대상 데이터 확인
-		List<BatchReceiptItem> receiptItems = this.getWmfIfToReceiptItems(receipt);
+		List<BatchReceiptItem> receiptItems = null;
+		if(ValueUtil.isEqual(jobType, SmsConstants.JOB_TYPE_SDAS)) {
+			receiptItems = this.getWmfIfToSdasReceiptItems(receipt);
+		} else {
+			receiptItems = this.getWmfIfToSrtnReceiptItems(receipt);
+		}
 		
 		// 3 수신 아이템 데이터 생성 
 		for(BatchReceiptItem item : receiptItems) {
@@ -107,16 +112,27 @@ public class SmsReceiveBatchService extends AbstractQueryService {
 	}
 	
 	/**
-	 * WMS IF 테이블에서 수신 대상 데이터 확인
+	 * WMS IF 테이블에서 SDAS 수신 대상 데이터 확인
 	 * 
 	 * @param receipt
 	 * @return
 	 */
-	private List<BatchReceiptItem> getWmfIfToReceiptItems(BatchReceipt receipt) {
+	private List<BatchReceiptItem> getWmfIfToSdasReceiptItems(BatchReceipt receipt) {
 		Map<String,Object> params = ValueUtil.newMap("domainId,comCd,areaCd,stageCd,jobDate",
 				receipt.getDomainId(), receipt.getComCd(), receipt.getAreaCd(), receipt.getStageCd(), receipt.getJobDate());
-		
-		return this.queryManager.selectListBySql(this.batchQueryStore.getWmsIfToReceiptDataQuery(), params, BatchReceiptItem.class, 0, 0);
+		return this.queryManager.selectListBySql(this.batchQueryStore.getWmsIfToSdasReceiptDataQuery(), params, BatchReceiptItem.class, 0, 0);
+	}
+	
+	/**
+	 * WMS IF 테이블에서 SRTN 수신 대상 데이터 확인
+	 * 
+	 * @param receipt
+	 * @return
+	 */
+	private List<BatchReceiptItem> getWmfIfToSrtnReceiptItems(BatchReceipt receipt) {
+		Map<String,Object> params = ValueUtil.newMap("domainId,comCd,areaCd,stageCd,jobDate",
+				receipt.getDomainId(), receipt.getComCd(), receipt.getAreaCd(), receipt.getStageCd(), receipt.getJobDate());
+		return this.queryManager.selectListBySql(this.batchQueryStore.getWmsIfToSrtnReceiptDataQuery(), params, BatchReceiptItem.class, 0, 0);
 	}
 	
 	/**

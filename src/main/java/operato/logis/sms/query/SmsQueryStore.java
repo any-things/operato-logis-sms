@@ -31,11 +31,35 @@ public class SmsQueryStore extends AbstractQueryStore {
 	
 	/*** BatchReceipt 관련 데이터 쿼리 ***/
 	/**
-	 * WMS I/F 테이블로 부터 Sorter BatchReceipt 데이터를 조회 한다.
+	 * WMS I/F 테이블로 부터 Sorter SDAS BatchReceipt 데이터를 조회 한다.
 	 * @return
 	 */
-	public String getWmsIfToReceiptDataQuery() {
-		return this.getQueryByPath("batch/WmsIfToReceiptData");
+	public String getWmsIfToSdasReceiptDataQuery() {
+		return this.getQueryByPath("batch/WmsIfToSdasReceiptData");
+	}
+	
+	/**
+	 * WMS I/F 테이블로 부터 Sorter SDAS Orders 데이터를 조회 한다.
+	 * @return
+	 */
+	public String getWmsIfToSdasReceiptOrderDataQuery() {
+		return this.getQueryByPath("batch/WmsIfToSdasReceiptOrderData");
+	}
+	
+	/**
+	 * WMS I/F 테이블로 부터 Sorter SRTN BatchReceipt 데이터를 조회 한다.
+	 * @return
+	 */
+	public String getWmsIfToSrtnReceiptDataQuery() {
+		return this.getQueryByPath("batch/WmsIfToSrtnReceiptData");
+	}
+	
+	/**
+	 * WMS I/F 테이블로 부터 Sorter SRTN Orders 데이터를 조회 한다.
+	 * @return
+	 */
+	public String getWmsIfToSrtnReceiptOrderDataQuery() {
+		return this.getQueryByPath("batch/WmsIfToSrtnReceiptOrderData");
 	}
 	
 	/**
