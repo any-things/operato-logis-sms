@@ -3,7 +3,6 @@ package operato.logis.sms.entity;
 import xyz.elidom.dbist.annotation.Column;
 import xyz.elidom.dbist.annotation.GenerationRule;
 import xyz.elidom.dbist.annotation.PrimaryKey;
-import xyz.elidom.dbist.annotation.Relation;
 import xyz.elidom.dbist.annotation.Table;
 
 @Table(name = "chutes", idStrategy = GenerationRule.UUID)

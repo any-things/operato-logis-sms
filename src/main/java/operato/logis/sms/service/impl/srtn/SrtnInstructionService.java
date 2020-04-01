@@ -23,7 +23,7 @@ import xyz.elidom.util.ValueUtil;
 @Component("srtnInstructionService")
 public class SrtnInstructionService extends AbstractQueryService implements IInstructionService {
 	@Autowired
-	private SmsQueryStore queryStore;
+	protected SmsQueryStore queryStore;
 	
 	@Override
 	public Map<String, Object> searchInstructionData(JobBatch batch, Object... params) {

@@ -153,6 +153,7 @@ public class SdasPreprocessService extends AbstractExecutionService implements I
 		return 0;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void assignChuteByAuto(JobBatch batch, String equipCds, List<OrderPreprocess> items, boolean isUpdate) {
 		// 1. 오더타입 조회 (반품, 출고)
 		// 2. 슈트별 작업자 그룹이 있는지 확인
@@ -229,7 +230,7 @@ public class SdasPreprocessService extends AbstractExecutionService implements I
 		
 		// 매장 수량 대비 작업 존을 계산 했을 떄 나머지 수량에 대한 매장 할당
 		for(int i = listIdx ; i < items.size() ; i++) {
-			ArrayList<String> idList = new ArrayList<>();
+			//ArrayList<String> idList = new ArrayList<>();
 			int chuteNo = Integer.parseInt(chuteArr.get(groupCnt)) + (i - listIdx);
 			String chuteName = String.format("%03d", chuteNo);
 			items.get(i).setSubEquipCd(chuteName);
