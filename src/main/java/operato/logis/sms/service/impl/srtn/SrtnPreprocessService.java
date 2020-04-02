@@ -17,6 +17,7 @@ import xyz.anythings.base.entity.OrderPreprocess;
 import xyz.anythings.base.event.EventConstants;
 import xyz.anythings.base.event.main.BatchPreprocessEvent;
 import xyz.anythings.base.service.api.IPreprocessService;
+import xyz.anythings.sys.event.model.SysEvent;
 import xyz.anythings.sys.service.AbstractExecutionService;
 import xyz.anythings.sys.util.AnyOrmUtil;
 import xyz.elidom.dbist.dml.Filter;
@@ -106,21 +107,26 @@ public class SrtnPreprocessService extends AbstractExecutionService implements I
 		return 0;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<JobBatch> completePreprocess(JobBatch batch, Object... params) {
-		// 1. 주문 가공 완료 전 처리 이벤트 전송, TODO 이벤트 취소 여부에 따라 메인 로직 스킵하는 로직 추가 
-		BatchPreprocessEvent beforeEvent = new BatchPreprocessEvent(batch, EventConstants.EVENT_STEP_BEFORE, BatchPreprocessEvent.ACTION_COMPLETE_PREPROCESS);
-		this.eventPublisher.publishEvent(beforeEvent);
+		// 1. 주문 가공 후 처리 이벤트 전송
+		BatchPreprocessEvent afterEvent = new BatchPreprocessEvent(batch, SysEvent.EVENT_STEP_AFTER, EventConstants.EVENT_PREPROCESS_COMPLETE);
+		afterEvent = (BatchPreprocessEvent)this.eventPublisher.publishEvent(afterEvent);
 		
-		// 2. 주문 가공 정보가 존재하는지 체크
+		// 2. 다음 단계 취소라면 ...
+		if(afterEvent.isAfterEventCancel()) {
+			Object result = afterEvent.getEventResultSet() != null && afterEvent.getEventResultSet().getResult() != null ? afterEvent.getEventResultSet().getResult() : null;
+			if(result instanceof List<?>) {
+				return (List<JobBatch>)result;
+			}
+		}
+		
+		// 3. 주문 가공 정보가 존재하는지 체크
 		this.beforeCompletePreprocess(batch, true);
 	
-		// 3. 주문 가공 완료 처리
+		// 4. 주문 가공 완료 처리
 		this.completePreprocessing(batch);
-	
-		// 4. 주문 가공 후 처리 이벤트 전송
-		BatchPreprocessEvent afterEvent = new BatchPreprocessEvent(batch, EventConstants.EVENT_STEP_AFTER, BatchPreprocessEvent.ACTION_COMPLETE_PREPROCESS);
-		this.eventPublisher.publishEvent(afterEvent);
 	
 		// 5. 주문 가공 완료 처리한 배치 리스트 리턴
 		return ValueUtil.toList(batch);
