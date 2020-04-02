@@ -152,4 +152,12 @@ public class SmsQueryStore extends AbstractQueryStore {
 		return this.getQueryByPath("select/smsChuteSummary");
 	}
 	
+	/**
+	 * 작업 마감을 위한 작업 데이터 요약 정보 조회
+	 *
+	 * @return
+	 */
+	public String getSmsBatchResultSummaryQuery() {
+		return this.getQueryByPath("batch/BatchResultSummary");
+	}
 }
