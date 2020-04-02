@@ -29,7 +29,7 @@ import xyz.elidom.util.ValueUtil;
  * 
  * @author shortstop
  */
-@Component("rtnBatchService")
+@Component("srtnBatchService")
 public class SrtnBatchService extends AbstractLogisService implements IBatchService {
 
 	/**

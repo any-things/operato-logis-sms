@@ -29,7 +29,7 @@ import xyz.elidom.util.ValueUtil;
  * 
  * @author shortstop
  */
-@Component("dasBatchService")
+@Component("sdasBatchService")
 public class SdasBatchService extends AbstractLogisService implements IBatchService {
 
 	/**
