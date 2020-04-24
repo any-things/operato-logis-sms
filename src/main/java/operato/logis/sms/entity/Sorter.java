@@ -25,6 +25,9 @@ public class Sorter extends xyz.elidom.orm.entity.basic.ElidomStampHook {
 	@Column (name = "stage_cd", length = 30)
 	private String stageCd;
 
+	@Column (name = "equip_group_cd", length = 30)
+	private String equipGroupCd;
+	
 	@Column (name = "sorter_cd", nullable = false, length = 30)
 	private String sorterCd;
 
@@ -74,6 +77,14 @@ public class Sorter extends xyz.elidom.orm.entity.basic.ElidomStampHook {
 
 	public void setStageCd(String stageCd) {
 		this.stageCd = stageCd;
+	}
+
+	public String getEquipGroupCd() {
+		return equipGroupCd;
+	}
+
+	public void setEquipGroupCd(String equipGroupCd) {
+		this.equipGroupCd = equipGroupCd;
 	}
 
 	public String getSorterCd() {
