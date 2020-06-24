@@ -76,7 +76,7 @@ public class SrtnPreprocessService extends AbstractExecutionService implements I
 	}
 
 	@Override
-	public int generatePreprocess(JobBatch batch) {
+	public int generatePreprocess(JobBatch batch, Object... params) {
 		/**
 		 * 1. 가공 버튼 클릭시 preprocess에 들어간다.
 		 * 2. 주문 가공 데이터를 생성하기 위해 주문 데이터를 조회

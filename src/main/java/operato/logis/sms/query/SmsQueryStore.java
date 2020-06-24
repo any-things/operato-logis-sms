@@ -63,12 +63,21 @@ public class SmsQueryStore extends AbstractQueryStore {
 	}
 	
 	/**
-	 *WMS I/F 테이블로 부터  주문수신 완료된 데이터 변경('Y')
+	 *WMS I/F 테이블로 부터 SDAS 주문수신 완료된 데이터 변경('Y')
 	 * 
 	 * @return
 	 */
-	public String getWmsIfToReceiptUpdateQuery() {
-		return this.getQueryByPath("batch/WmsIfToReceiptUpdate");
+	public String getWmsIfToSdasReceiptUpdateQuery() {
+		return this.getQueryByPath("batch/WmsIfToSdasReceiptUpdate");
+	}
+	
+	/**
+	 *WMS I/F 테이블로 부터 SRTN 주문수신 완료된 데이터 변경('Y')
+	 * 
+	 * @return
+	 */
+	public String getWmsIfToSrtnReceiptUpdateQuery() {
+		return this.getQueryByPath("batch/WmsIfToSrtnReceiptUpdate");
 	}
 	
 	/**

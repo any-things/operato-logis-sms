@@ -29,6 +29,7 @@ import xyz.elidom.dbist.dml.Query;
 import xyz.elidom.dbist.util.StringJoiner;
 import xyz.elidom.exception.server.ElidomRuntimeException;
 import xyz.elidom.sys.SysConstants;
+import xyz.elidom.sys.util.DateUtil;
 import xyz.elidom.util.ValueUtil;
 
 @Component
@@ -279,10 +280,18 @@ public class SmsReceiveBatchService extends AbstractQueryService {
 	 * @return
 	 */
 	private void updateWmfIfToReceiptItems(BatchReceiptItem item,String jobDate) {
-		Map<String,Object> params = ValueUtil.newMap("wcsBatchNo,wmsBatchNo,stageCd,jobSeq,jobDate",
-				item.getWcsBatchNo(),item.getWmsBatchNo(),item.getStageCd(),item.getJobSeq(),jobDate);
- 
-		this.queryManager.executeBySql(this.batchQueryStore.getWmsIfToReceiptUpdateQuery(), params);
+		if(ValueUtil.isEqual(item.getJobType(), SmsConstants.JOB_TYPE_SDAS)) {
+			Map<String,Object> params = ValueUtil.newMap("wcsBatchNo,wmsBatchNo,stageCd,jobSeq,jobDate",
+					item.getWcsBatchNo(),item.getWmsBatchNo(),item.getStageCd(),item.getJobSeq(),jobDate);
+			
+			this.queryManager.executeBySql(this.batchQueryStore.getWmsIfToSdasReceiptUpdateQuery(), params);
+			
+		} else if(ValueUtil.isEqual(item.getJobType(), SmsConstants.JOB_TYPE_SRTN)) {
+			Map<String,Object> params = ValueUtil.newMap("wcsBatchNo,wmsBatchNo,stageCd,jobSeq,jobDate",
+					item.getWcsBatchNo(),item.getWmsBatchNo(),item.getStageCd(),item.getJobSeq(),jobDate);
+	 
+			this.queryManager.executeBySql(this.batchQueryStore.getWmsIfToSrtnReceiptUpdateQuery(), params);
+		}
 	}
 	
 	/**
