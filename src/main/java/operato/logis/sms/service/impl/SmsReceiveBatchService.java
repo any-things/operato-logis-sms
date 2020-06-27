@@ -29,7 +29,6 @@ import xyz.elidom.dbist.dml.Query;
 import xyz.elidom.dbist.util.StringJoiner;
 import xyz.elidom.exception.server.ElidomRuntimeException;
 import xyz.elidom.sys.SysConstants;
-import xyz.elidom.sys.util.DateUtil;
 import xyz.elidom.util.ValueUtil;
 
 @Component
@@ -64,8 +63,8 @@ public class SmsReceiveBatchService extends AbstractQueryService {
 	 * @return
 	 */
 	private BatchReceipt createReadyToReceiveData(BatchReceipt receipt, String jobType, Object ... params) {
-		// 1. 대기 상태 이거나 진행 중인 수신이 있는지 확인
 		
+		// 1. 대기 상태 이거나 진행 중인 수신이 있는지 확인
 		BatchReceipt runBatchReceipt = this.checkRunningOrderReceipt(receipt,jobType);
 		if(runBatchReceipt != null) return runBatchReceipt;
 		
@@ -82,10 +81,10 @@ public class SmsReceiveBatchService extends AbstractQueryService {
 			item.setBatchId(LogisBaseUtil.newReceiptJobBatchId(receipt.getDomainId()));
 			item.setBatchReceiptId(receipt.getId());
 			this.queryManager.insert(item);
+			receipt.addItem(item);
 		}
 		
-		// 4. 수신 아이템 설정 및 리턴
-		receipt.setItems(receiptItems);
+		// 4. 배치 수신 결과 리턴
 		return receipt;
 	}
 	
