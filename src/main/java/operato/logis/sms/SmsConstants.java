@@ -16,4 +16,8 @@ public class SmsConstants extends LogisConstants {
 	 * 분류 작업 유형 : SRTN 
 	 */
 	public static final String JOB_TYPE_SRTN = "SRTN";
+	/**
+	 * 분류 작업 유형 : SDPS 
+	 */
+	public static final String JOB_TYPE_SDPS = "SDPS";
 }
