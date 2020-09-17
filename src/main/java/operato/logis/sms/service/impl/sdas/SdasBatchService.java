@@ -173,4 +173,16 @@ public class SdasBatchService extends AbstractLogisService implements IBatchServ
 		this.queryManager.update(batch, "resultOrderQty", "resultPcs", "progressRate", "uph", "status", "finishedAt");
 	}
 
+	@Override
+	public void isPossibleChangeEquipment(JobBatch batch, String toEquipCd) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void changeEquipment(JobBatch batch, String toEquipCd) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
