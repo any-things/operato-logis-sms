@@ -52,6 +52,9 @@ public class OperatoLogisSmsInitializer {
 	public void refresh(ContextRefreshedEvent event) {
 		this.logger.info("Operato Logistics SMS module refreshing...");
 		
+		this.configSet.addConfig(this.module.getName(), this.module);
+		this.scanServices();
+		
 		this.logger.info("Operato Logistics SMS module refreshed!");
 	}
 	
@@ -59,8 +62,6 @@ public class OperatoLogisSmsInitializer {
     void ready(ApplicationReadyEvent event) {
 		this.logger.info("Operato Logistics SMS module initializing...");
 		
-		this.configSet.addConfig(this.module.getName(), this.module);
-		this.scanServices();
 		this.initQueryStores();
 		
 		this.logger.info("Operato Logistics SMS module initialized!");
